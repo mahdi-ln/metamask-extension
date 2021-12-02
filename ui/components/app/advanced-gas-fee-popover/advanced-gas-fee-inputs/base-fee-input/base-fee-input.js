@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { HIGH_FEE_WARNING_MULTIPLIER } from '../../../../../pages/send/send.constants';
 import { PRIORITY_LEVELS } from '../../../../../../shared/constants/gas';
@@ -10,11 +10,7 @@ import {
 import { PRIMARY, SECONDARY } from '../../../../../helpers/constants/common';
 import { bnGreaterThan, bnLessThan } from '../../../../../helpers/utils/util';
 import { decGWEIToHexWEI } from '../../../../../helpers/utils/conversions.util';
-import {
-  getAdvancedGasFeeValues,
-  getIsAdvancedGasFeeDefault,
-} from '../../../../../selectors';
-import { setAdvancedGasFee } from '../../../../../store/actions';
+import { getAdvancedGasFeeValues } from '../../../../../selectors';
 import { useGasFeeContext } from '../../../../../contexts/gasFee';
 import { useI18nContext } from '../../../../../hooks/useI18nContext';
 import { useUserPreferencedCurrency } from '../../../../../hooks/useUserPreferencedCurrency';
@@ -76,7 +72,6 @@ const validateBaseFee = (
 
 const BaseFeeInput = () => {
   const t = useI18nContext();
-  const dispatch = useDispatch();
 
   const { gasFeeEstimates, estimateUsed, maxFeePerGas } = useGasFeeContext();
   const {
@@ -96,7 +91,6 @@ const BaseFeeInput = () => {
   } = useUserPreferencedCurrency(SECONDARY);
 
   const advancedGasFeeValues = useSelector(getAdvancedGasFeeValues);
-  const isAdvancedGasFeeDefault = useSelector(getIsAdvancedGasFeeDefault);
 
   const [editingInGwei, setEditingInGwei] = useState(false);
 
