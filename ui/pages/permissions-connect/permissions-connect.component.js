@@ -8,6 +8,7 @@ import { DEFAULT_ROUTE } from '../../helpers/constants/routes';
 import PermissionPageContainer from '../../components/app/permission-page-container';
 import ChooseAccount from './choose-account';
 import PermissionsRedirect from './redirect';
+import SnapInstall from './snap-install/snap-install';
 
 const APPROVE_TIMEOUT = MILLISECOND * 1200;
 
