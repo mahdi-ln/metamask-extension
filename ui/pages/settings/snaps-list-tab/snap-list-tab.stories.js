@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Provider } from 'react-redux';
 // import { object, boolean, select } from '@storybook/addon-knobs';
-
 import configureStore from '../../../store/store';
 import testData from '../../../../.storybook/test-data';
 import SnapListTab from './snap-list-tab.component';
@@ -13,8 +12,16 @@ export default {
   title: 'Pages/Settings/SnapListTab',
   id: __filename,
   decorators: [(story) => <Provider store={store}>{story()}</Provider>],
+  argTypes: {
+    onToggle: {
+      action: 'onToggle',
+    },
+    onRemove: {
+      action: 'onRemove',
+    },
+  },
 };
-export const DefaultStory = () => {
+export const DefaultStory = (args) => {
   const state = store.getState();
   const [viewingSnap, setViewingSnap] = useState();
   const [snap, setSnap] = useState();
@@ -22,9 +29,12 @@ export const DefaultStory = () => {
   return (
     <div>
       <SnapListTab
+        {...args}
         snaps={state.metamask.snaps}
         viewingSnap={viewingSnap}
         snap={snap}
+        onToggle={args.onToggle}
+        onRemove={args.onRemove}
         onClick={(_, s) => {
           setSnap(s);
           setViewingSnap(true);
@@ -33,5 +43,9 @@ export const DefaultStory = () => {
     </div>
   );
 };
-
+const state = store.getState();
+DefaultStory.args = {
+  snaps: state.metamask.snaps,
+  viewingSnap: false,
+};
 DefaultStory.storyName = 'Default';

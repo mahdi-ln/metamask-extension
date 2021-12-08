@@ -8,21 +8,34 @@ const propTypes = {
   viewingSnap: PropTypes.bool,
   snap: PropTypes.object,
   onClick: PropTypes.func.isRequired,
+  onRemove: PropTypes.func.isRequired,
+  onToggle: PropTypes.func.isRequired,
 };
 
 const SnapListTab = (props) => {
   if (props.viewingSnap) {
-    return <ViewSnap snap={props.snap} />;
+    return (
+      <ViewSnap
+        snap={props.snap}
+        onToggle={(event) => props.onToggle(event, props.snap)}
+        onRemove={(event) => {
+          props.onRemove(event, props.snap);
+        }}
+      />
+    );
   }
   return (
     <div className="snaps-list-wrapper">
-      {props.snaps.map((snap, i) => {
+      {Object.entries(props.snaps).map(([key, snap]) => {
         return (
           <SnapSettingsCard
             className="snap-settings-card"
             isEnabled={snap.enabled}
             dateAdded={new Date().toDateString()}
-            key={i}
+            key={key}
+            onToggle={(event) => {
+              props.onToggle(event, snap);
+            }}
             description={snap.description}
             url={snap.name}
             name={snap.name}

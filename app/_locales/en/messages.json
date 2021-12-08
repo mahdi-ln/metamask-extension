@@ -2486,6 +2486,15 @@
   "snaps": {
     "message": "Snaps"
   },
+  "removeSnap": {
+    "message": "Remove Snap"
+  },
+  "snapsSettingsDescription": {
+    "message": "Manage your Snaps"
+  },
+  "removeSnapDescription": {
+    "message": "This action will delete the snap, its data and revoke your given permissions."
+  },
   "snap_clearState": {
     "message": "Clear its stored data from your device.",
     "description": "The description for the `snap_clearState` permission"

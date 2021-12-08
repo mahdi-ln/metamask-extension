@@ -102,8 +102,8 @@ const state = {
       swapsFeatureIsLive: false,
       swapsQuoteRefreshTime: 60000,
     },
-    snaps: [
-      {
+    snaps: {
+      "foo": {
         name: 'foo',
         permissionName: 'foo_bar',
         status: 'installing',
@@ -114,7 +114,7 @@ const state = {
           snap_confirm: {}
         },
       },
-      {
+      "bar": {
         name: 'bar',
         permissionName: 'foo_bar',
         status: 'crashed',
@@ -125,7 +125,7 @@ const state = {
           snap_confirm: {}
         },
       }
-    ],
+    },
     accountArray: [
       {
         name: 'This is a Really Long Account Name',

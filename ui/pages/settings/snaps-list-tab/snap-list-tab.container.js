@@ -8,7 +8,7 @@ import { SNAPS_VIEW_ROUTE } from '../../../helpers/constants/routes';
 import SnapListTab from './snap-list-tab.component';
 
 const mapStateToProps = (state, ownProps) => {
-  const { location, history } = ownProps;
+  const { location, history, onRemove, onToggle } = ownProps;
   const { pathname } = location;
 
   const viewingSnap = Boolean(pathname.match(SNAPS_VIEW_ROUTE));
@@ -19,10 +19,16 @@ const mapStateToProps = (state, ownProps) => {
   };
   return {
     snaps: state.metamask.snaps,
-    snap: state.metamask.snaps.find((snap) => snap.name === pathNameTail),
+    snap: state.metamask.snaps
+      ? Object.entries(state.metamask.snaps).find(
+          (snap) => snap.name === pathNameTail,
+        )
+      : undefined,
     viewingSnap,
     envIsPopup,
     onClick,
+    onRemove,
+    onToggle,
   };
 };
 
