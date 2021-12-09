@@ -1398,8 +1398,7 @@ export function updateSendAsset({ type, details }) {
 
       await dispatch(hideLoadingIndication());
     } else if (type === ASSET_TYPES.COLLECTIBLE) {
-      console.log('details:', details);
-      // TODO update balance? Probably unnecessary?
+      // TODO update balance?
       balance = '0x1';
     } else {
       // if changing to native currency, get it from the account key in send

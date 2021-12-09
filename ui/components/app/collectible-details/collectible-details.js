@@ -86,7 +86,7 @@ export default function CollectibleDetails({ collectible }) {
   };
 
   const openSeaLink = getOpenSeaLink();
-  
+
   const onSend = () => {
     dispatch(
       updateSendAsset({
@@ -160,7 +160,11 @@ export default function CollectibleDetails({ collectible }) {
             <Box
               marginTop={6}
               justifyContent={JUSTIFY_CONTENT.CENTER}
-              width={BLOCK_SIZES.HALF}
+              width={
+                getEnvironmentType() === ENVIRONMENT_TYPE_POPUP
+                  ? BLOCK_SIZES.THREE_FOURTHS
+                  : BLOCK_SIZES.HALF
+              }
             >
               <Button type="primary" onClick={onSend}>
                 {t('send')}
