@@ -75,13 +75,12 @@ export default class SendAssetRow extends Component {
     return (
       <SendRowWrapper label={`${t('asset')}:`}>
         <div className="send-v2__asset-dropdown">
-        <div
-        className="send-v2__asset-dropdown__input-wrapper"
-        onClick={this.openDropdown}
-      >
-          {this.renderSendToken()}
-        {/* {token ? this.renderToken(token) : this.renderNativeCurrency()} */}
-      </div>
+          <div
+            className="send-v2__asset-dropdown__input-wrapper"
+            onClick={this.openDropdown}
+          >
+            {this.renderSendAsset()}
+          </div>
           {this.state.sendableTokens.length > 0
             ? this.renderAssetDropdown()
             : null}
@@ -90,9 +89,8 @@ export default class SendAssetRow extends Component {
     );
   }
 
-  renderSendToken() {
+  renderSendAsset() {
     const { sendAssetAddress, tokens, collectibles, testState } = this.props;
-    console.log('testState:', testState);
 
     const token = tokens.find(({ address }) =>
       isEqualCaseInsensitive(address, sendAssetAddress),
@@ -100,22 +98,13 @@ export default class SendAssetRow extends Component {
     const collectible = collectibles.find(({ address }) =>
       isEqualCaseInsensitive(address, sendAssetAddress),
     );
-    if(token){
-      return this.renderToken(token)
-    } else if (collectible){
-      this.renderCollectible(collectible)
+    if (token) {
+      return this.renderToken(token);
+    } else if (collectible) {
+      return this.renderCollectible(collectible);
     } else {
-      this.renderNativeCurrency()
+      return this.renderNativeCurrency();
     }
-
-    // return (
-    //   <div
-    //     className="send-v2__asset-dropdown__input-wrapper"
-    //     onClick={this.openDropdown}
-    //   >
-    //     {token ? this.renderToken(token) : this.renderNativeCurrency()}
-    //   </div>
-    // );
   }
 
   renderAssetDropdown() {
@@ -129,7 +118,10 @@ export default class SendAssetRow extends Component {
           <div className="send-v2__asset-dropdown__list">
             {this.renderNativeCurrency(true)}
             {this.state.sendableTokens.map((token) =>
-              this.renderAsset(token, true),
+              this.renderToken(token, true),
+            )}
+            {this.props.collectibles.map((collectible) =>
+              this.renderCollectible(collectible, true),
             )}
           </div>
         </div>
@@ -216,15 +208,15 @@ export default class SendAssetRow extends Component {
     );
   }
 
-  renderCollectible(token, insideDropdown = false) {
-    const { address, name, image } = token;
+  renderCollectible(collectible, insideDropdown = false) {
+    const { address, name, image, tokenId } = collectible;
     const { t } = this.context;
 
     return (
       <div
         key={address}
         className="send-v2__asset-dropdown__asset"
-        onClick={() => this.selectToken(ASSET_TYPES.TOKEN, token)}
+        onClick={() => this.selectToken(ASSET_TYPES.COLLECTIBLE, collectible)}
       >
         <div className="send-v2__asset-dropdown__asset-icon">
           <Identicon address={address} diameter={36} image={image} />
@@ -233,9 +225,9 @@ export default class SendAssetRow extends Component {
           <div className="send-v2__asset-dropdown__symbol">{name}</div>
           <div className="send-v2__asset-dropdown__name">
             <span className="send-v2__asset-dropdown__name__label">
-              {`${t('balance')}:`}
+              {`${t('tokenId')}:`}
             </span>
-            <TokenBalance token={token} />
+            {tokenId}
           </div>
         </div>
         {!insideDropdown && (

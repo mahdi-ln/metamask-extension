@@ -26,6 +26,9 @@
   "QRHardwareSignRequestTitle": {
     "message": "Request Signature"
   },
+  "tokenId": {
+    "message": "Token ID"
+  },
   "QRHardwareUnknownQRCodeTitle": {
     "message": "Error"
   },
