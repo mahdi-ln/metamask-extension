@@ -155,10 +155,12 @@ export const GAS_INPUT_MODES = {
  * The types of assets that a user can send
  * 1. NATIVE - The native asset for the current network, such as ETH
  * 2. TOKEN - An ERC20 token.
+ * 2. COLLECTIBLE - An ERC721 or ERC1155 token.
  */
 export const ASSET_TYPES = {
   NATIVE: 'NATIVE',
   TOKEN: 'TOKEN',
+  COLLECTIBLE: 'COLLECTIBLE',
 };
 
 /**
@@ -841,6 +843,9 @@ const slice = createSlice({
       state.asset.balance = action.payload.balance;
       if (state.asset.type === ASSET_TYPES.TOKEN) {
         state.asset.details = action.payload.details;
+      } else if (state.asset.type === ASSET_TYPES.COLLECTIBLE) {
+        state.asset.details = action.payload.details;
+        // TODO ANYTHING ELSE? (IF NOT JUST FOLD INTO IF BLOCK ABOVE)
       } else {
         // clear the details object when sending native currency
         state.asset.details = null;
@@ -905,6 +910,19 @@ const slice = createSlice({
         state.draftTransaction.txParams.gas = state.gas.gasLimit;
         switch (state.asset.type) {
           case ASSET_TYPES.TOKEN:
+            // When sending a token the to address is the contract address of
+            // the token being sent. The value is set to '0x0' and the data
+            // is generated from the recipient address, token being sent and
+            // amount.
+            state.draftTransaction.txParams.to = state.asset.details.address;
+            state.draftTransaction.txParams.value = '0x0';
+            state.draftTransaction.txParams.data = generateTokenTransferData({
+              toAddress: state.recipient.address,
+              amount: state.amount.value,
+              sendToken: state.asset.details,
+            });
+            break;
+          case ASSET_TYPES.COLLECTIBLE:
             // When sending a token the to address is the contract address of
             // the token being sent. The value is set to '0x0' and the data
             // is generated from the recipient address, token being sent and
@@ -990,7 +1008,9 @@ const slice = createSlice({
         recipient.error = null;
         recipient.warning = null;
       } else {
-        const isSendingToken = asset.type === ASSET_TYPES.TOKEN;
+        const isSendingToken =
+          asset.type === ASSET_TYPES.TOKEN ||
+          asset.type === ASSET_TYPES.COLLECTIBLE;
         const { chainId, tokens, tokenAddressList } = action.payload;
         if (
           isBurnAddress(recipient.userInput) ||
@@ -1044,6 +1064,14 @@ const slice = createSlice({
         // set error to INSUFFICIENT_FUNDS_ERROR if the token balance is lower
         // than the amount of token the user is attempting to send.
         case state.asset.type === ASSET_TYPES.TOKEN &&
+          !isTokenBalanceSufficient({
+            tokenBalance: state.asset.balance ?? '0x0',
+            amount: state.amount.value,
+            decimals: state.asset.details.decimals,
+          }):
+          state.amount.error = INSUFFICIENT_TOKENS_ERROR;
+          break;
+        case state.asset.type === ASSET_TYPES.COLLECTIBLE &&
           !isTokenBalanceSufficient({
             tokenBalance: state.asset.balance ?? '0x0',
             amount: state.amount.value,
@@ -1362,12 +1390,17 @@ export function updateSendAsset({ type, details }) {
         details,
         state.send.account.address ?? getSelectedAddress(state),
       );
-      if (details && details.isERC721 === undefined) {
-        const updatedAssetDetails = await updateTokenType(details.address);
-        details.isERC721 = updatedAssetDetails.isERC721;
-      }
+      // TODO delete
+      // if (details && details.isERC721 === undefined) {
+      //   const updatedAssetDetails = await updateTokenType(details.address);
+      //   details.isERC721 = updatedAssetDetails.isERC721;
+      // }
 
       await dispatch(hideLoadingIndication());
+    } else if (type === ASSET_TYPES.COLLECTIBLE) {
+      console.log('details:', details);
+      // TODO update balance? Probably unnecessary?
+      balance = '0x1';
     } else {
       // if changing to native currency, get it from the account key in send
       // state which is kept in sync when accounts change.
@@ -1555,7 +1588,10 @@ export function signTransaction() {
         ),
       };
       dispatch(updateTransaction(editingTx));
-    } else if (asset.type === ASSET_TYPES.TOKEN) {
+    } else if (asset.type === ASSET_TYPES.TOKEN || asset.type === ASSET_TYPES.COLLECTIBLE) {
+
+      //TODO FIGURE OUT THE CORRECT ABI HERE!
+
       // When sending a token transaction we have to the token.transfer method
       // on the token contract to construct the transaction. This results in
       // the proper transaction data and properties being set and a new

@@ -17,7 +17,7 @@ import SendContent from './send-content.component';
 
 function mapStateToProps(state) {
   const ownedAccounts = accountsWithSendEtherInfoSelector(state);
-  const to = getSendTo(state);
+  const to = getSendTo(state)
   return {
     isAssetSendable: getIsAssetSendable(state),
     isOwnedAccount: Boolean(

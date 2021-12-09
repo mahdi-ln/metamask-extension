@@ -69,9 +69,9 @@ export default class SendContent extends Component {
           {isEthGasPrice
             ? this.renderWarning(ETH_GAS_PRICE_FETCH_WARNING_KEY)
             : null}
-          {isAssetSendable === false
+          {/* {isAssetSendable === false
             ? this.renderError(UNSENDABLE_ASSET_ERROR_KEY)
-            : null}
+            : null} */}
           {error ? this.renderError(error) : null}
           {warning ? this.renderWarning() : null}
           {this.maybeRenderAddContact()}
