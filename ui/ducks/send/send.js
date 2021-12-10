@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import abi from 'human-standard-token-abi';
+import abiERC721 from 'human-standard-collectible-abi';
 import BigNumber from 'bignumber.js';
 import { addHexPrefix } from 'ethereumjs-util';
 import { debounce } from 'lodash';
@@ -1599,10 +1600,7 @@ export function signTransaction() {
         ),
       };
       dispatch(updateTransaction(editingTx));
-    } else if (
-      asset.type === ASSET_TYPES.TOKEN ||
-      asset.type === ASSET_TYPES.COLLECTIBLE
-    ) {
+    } else if (asset.type === ASSET_TYPES.TOKEN) {
       //TODO FIGURE OUT THE CORRECT ABI HERE!
 
       // When sending a token transaction we have to the token.transfer method
@@ -1613,6 +1611,25 @@ export function signTransaction() {
       try {
         const token = global.eth.contract(abi).at(asset.details.address);
         token.transfer(address, value, {
+          ...txParams,
+          to: undefined,
+          data: undefined,
+        });
+        dispatch(showConfTxPage());
+        dispatch(hideLoadingIndication());
+      } catch (error) {
+        dispatch(hideLoadingIndication());
+        dispatch(displayWarning(error.message));
+      }
+    } else if (asset.type === ASSET_TYPES.COLLECTIBLE) {
+      // When sending a token transaction we have to the token.transfer method
+      // on the token contract to construct the transaction. This results in
+      // the proper transaction data and properties being set and a new
+      // transaction being added to background state. Once the new transaction
+      // is added to state a subsequent confirmation will be queued.
+      try {
+        const token = global.eth.contract(abiERC721).at(asset.details.address);
+        token.transferFrom(address, value, {
           ...txParams,
           to: undefined,
           data: undefined,
