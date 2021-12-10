@@ -25,6 +25,7 @@ import {
   addGasBuffer,
   calcGasTotal,
   generateTokenTransferData,
+  generateCollectibleTransferData,
   isBalanceSufficient,
   isTokenBalanceSufficient,
 } from '../../pages/send/send.utils';
@@ -929,10 +930,10 @@ const slice = createSlice({
             // amount.
             state.draftTransaction.txParams.to = state.asset.details.address;
             state.draftTransaction.txParams.value = '0x0';
-            state.draftTransaction.txParams.data = generateTokenTransferData({
+            state.draftTransaction.txParams.data = generateCollectibleTransferData({
               toAddress: state.recipient.address,
-              amount: state.amount.value,
-              sendToken: state.asset.details,
+              fromAddress: state.send.account.address,
+              tokenId: state.asset.details.tokenId,
             });
             break;
           case ASSET_TYPES.NATIVE:

@@ -17,6 +17,7 @@ export {
   addGasBuffer,
   calcGasTotal,
   generateTokenTransferData,
+  generateCollectibleTransferData,
   isBalanceSufficient,
   isTokenBalanceSufficient,
   ellipsify,
@@ -140,6 +141,29 @@ function generateTokenTransferData({
           [toAddress, addHexPrefix(amount)],
         ),
         (x) => `00${x.toString(16)}`.slice(-2),
+      )
+      .join('')
+  );
+}
+
+
+function generateCollectibleTransferData({
+  toAddress = '0x0',
+  fromAddress = '0x0',
+  tokenId,
+}) {
+  if (!sendToken) {
+    return undefined;
+  }
+  return (
+    COLLECTIBLE_TRANSFER_FROM_FUNCTION_SIGNATURE +
+    Array.prototype.map
+      .call(
+        rawEncode(
+          ['address', 'address', 'uint256'],
+          [fromAddress, toAddress, addHexPrefix(tokenId)]
+        ),
+        (x) => ('00' + x.toString(16)).slice(-2)
       )
       .join('')
   );
