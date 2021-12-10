@@ -145,10 +145,6 @@ export default class MetamaskController extends EventEmitter {
     this.extension = opts.extension;
     this.platform = opts.platform;
     const initState = opts.initState || {};
-    // TODO:flask temporary hack
-    delete initState.PermissionController;
-    delete initState.SnapController;
-
     const version = this.platform.getVersion();
     this.recordFirstTimeInfo(initState);
 

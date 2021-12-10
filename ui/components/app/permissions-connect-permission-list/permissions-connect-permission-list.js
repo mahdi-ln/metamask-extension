@@ -46,42 +46,15 @@ export default function PermissionsConnectPermissionList({ permissions }) {
     };
   }, [t]);
 
-  ///: BEGIN:ONLY_INCLUDE_IN(flask)
-  // TODO:flask Replace this with something better
-  const getPermissionKey = (permissionName) => {
-    if (PERMISSION_TYPES[permissionName]) {
-      return permissionName;
-    }
-
-    let key = '';
-    const split = permissionName.split('_');
-    for (let i = 1; i < split.length; i++) {
-      key = `${key.replace(/_\*$/u, '')}${split[i - 1]}_${split[i]}_*`;
-
-      if (PERMISSION_TYPES[key]) {
-        return key;
-      }
-    }
-    return UNKNOWN_PERMISSION;
-  };
-  ///: END:ONLY_INCLUDE_IN
-
   return (
     <div className="permissions-connect-permission-list">
-      {Object.keys(permissions).map((permission) => {
-        const permissionKey = getPermissionKey(permission);
-        console.log('PERM', permission, permissionKey);
-        return (
-          <div
-            className="permission"
-            key={PERMISSION_TYPES[permissionKey].label}
-          >
-            <i className={PERMISSION_TYPES[permissionKey].leftIcon} />
-            {PERMISSION_TYPES[permissionKey].label}
-            <i className={PERMISSION_TYPES[permissionKey].rightIcon} />
-          </div>
-        );
-      })}
+      {Object.keys(permissions).map((permission) => (
+        <div className="permission" key={PERMISSION_TYPES[permission].label}>
+          <i className={PERMISSION_TYPES[permission].leftIcon} />
+          {PERMISSION_TYPES[permission].label}
+          <i className={PERMISSION_TYPES[permission].rightIcon} />
+        </div>
+      ))}
     </div>
   );
 }
