@@ -223,11 +223,20 @@ async function estimateGasLimitForSend({
     paramsForGasEstimate.value = '0x0';
     // We have to generate the erc20 contract call to transfer tokens in
     // order to get a proper estimate for gasLimit.
-    paramsForGasEstimate.data = generateTokenTransferData({
-      toAddress: to,
-      amount: value,
-      sendToken,
-    });
+
+    paramsForGasEstimate.data =
+      sendToken?.standard === 'ERC721'
+        ? generateCollectibleTransferData({
+            toAddress: to,
+            fromAddress: selectedAddress,
+            tokenId: sendToken.tokenId,
+          })
+        : generateTokenTransferData({
+            toAddress: to,
+            amount: value,
+            sendToken,
+          });
+
     paramsForGasEstimate.to = sendToken.address;
   } else {
     if (!data) {
@@ -930,11 +939,13 @@ const slice = createSlice({
             // amount.
             state.draftTransaction.txParams.to = state.asset.details.address;
             state.draftTransaction.txParams.value = '0x0';
-            state.draftTransaction.txParams.data = generateCollectibleTransferData({
-              toAddress: state.recipient.address,
-              fromAddress: state.send.account.address,
-              tokenId: state.asset.details.tokenId,
-            });
+            state.draftTransaction.txParams.data = generateCollectibleTransferData(
+              {
+                toAddress: state.recipient.address,
+                fromAddress: state.account.address,
+                tokenId: state.asset.details.tokenId,
+              },
+            );
             break;
           case ASSET_TYPES.NATIVE:
           default:
@@ -1588,8 +1599,10 @@ export function signTransaction() {
         ),
       };
       dispatch(updateTransaction(editingTx));
-    } else if (asset.type === ASSET_TYPES.TOKEN || asset.type === ASSET_TYPES.COLLECTIBLE) {
-
+    } else if (
+      asset.type === ASSET_TYPES.TOKEN ||
+      asset.type === ASSET_TYPES.COLLECTIBLE
+    ) {
       //TODO FIGURE OUT THE CORRECT ABI HERE!
 
       // When sending a token transaction we have to the token.transfer method

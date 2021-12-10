@@ -11,7 +11,10 @@ import {
 import { calcTokenAmount } from '../../helpers/utils/token-util';
 import { addHexPrefix } from '../../../app/scripts/lib/util';
 
-import { TOKEN_TRANSFER_FUNCTION_SIGNATURE } from './send.constants';
+import {
+  TOKEN_TRANSFER_FUNCTION_SIGNATURE,
+  COLLECTIBLE_TRANSFER_FROM_FUNCTION_SIGNATURE,
+} from './send.constants';
 
 export {
   addGasBuffer,
@@ -146,24 +149,23 @@ function generateTokenTransferData({
   );
 }
 
-
 function generateCollectibleTransferData({
   toAddress = '0x0',
   fromAddress = '0x0',
   tokenId,
 }) {
-  if (!sendToken) {
+  if (!tokenId) {
     return undefined;
   }
   return (
     COLLECTIBLE_TRANSFER_FROM_FUNCTION_SIGNATURE +
     Array.prototype.map
       .call(
-        rawEncode(
+        abi.rawEncode(
           ['address', 'address', 'uint256'],
-          [fromAddress, toAddress, addHexPrefix(tokenId)]
+          [fromAddress, toAddress, addHexPrefix(tokenId)],
         ),
-        (x) => ('00' + x.toString(16)).slice(-2)
+        (x) => ('00' + x.toString(16)).slice(-2),
       )
       .join('')
   );
