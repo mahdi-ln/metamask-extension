@@ -79,7 +79,7 @@ const BaseFeeInput = () => {
     setErrorValue,
     setMaxFeePerGas,
     setBaseFeeMultiplier,
-  } = useAdvanceGasFeePopoverContext();
+  } = useAdvancedGasFeePopoverContext();
   const { estimatedBaseFee } = gasFeeEstimates;
   const [baseFeeError, setBaseFeeError] = useState();
   const {
