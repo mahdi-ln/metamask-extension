@@ -210,11 +210,13 @@ class SettingsPage extends PureComponent {
             description: t('contactsSettingsDescription'),
             key: CONTACT_LIST_ROUTE,
           },
+          ///: BEGIN:ONLY_INCLUDE_IN(flask)
           {
             content: t('snaps'),
             description: t('snapsSettingsDescription'),
             key: SNAPS_LIST_ROUTE,
           },
+          ///: END:ONLY_INCLUDE_IN
           {
             content: t('securityAndPrivacy'),
             description: t('securitySettingsDescription'),
@@ -288,8 +290,18 @@ class SettingsPage extends PureComponent {
           path={`${CONTACT_VIEW_ROUTE}/:id`}
           component={ContactListTab}
         />
-        <Route exact path={SNAPS_LIST_ROUTE} component={SnapListTab} />
-        {/* <Route exact path={`${SNAPS_VIEW_ROUTE}/:id`} component={SnapListTab} /> */}
+        {
+          ///: BEGIN:ONLY_INCLUDE_IN(flask)
+          <>
+            <Route exact path={SNAPS_LIST_ROUTE} component={SnapListTab} />
+            <Route
+              exact
+              path={`${SNAPS_VIEW_ROUTE}/:id`}
+              component={SnapListTab}
+            />
+          </>
+          ///: END:ONLY_INCLUDE_IN
+        }
         <Route
           render={(routeProps) => (
             <SettingsTab

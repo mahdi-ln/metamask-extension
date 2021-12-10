@@ -16,6 +16,7 @@ import {
   SECURITY_ROUTE,
   SETTINGS_ROUTE,
   SNAPS_LIST_ROUTE,
+  SNAPS_VIEW_ROUTE,
 } from '../../helpers/constants/routes';
 import SettingsPage from './settings.component';
 
@@ -40,6 +41,7 @@ const ROUTES_TO_I18N_KEYS = {
   [CONTACT_EDIT_ROUTE]: 'editContact',
   [CONTACT_LIST_ROUTE]: 'contacts',
   [SNAPS_LIST_ROUTE]: 'snaps',
+  [SNAPS_VIEW_ROUTE]: 'snaps',
   [CONTACT_VIEW_ROUTE]: 'viewContact',
   [NETWORKS_ROUTE]: 'networks',
   [NETWORKS_FORM_ROUTE]: 'networks',

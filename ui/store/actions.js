@@ -798,6 +798,33 @@ export function txError(err) {
 }
 
 ///: BEGIN:ONLY_INCLUDE_IN(flask)
+export function disableSnap(snapId) {
+  return (dispatch) => {
+    return promisifiedBackground
+      .disableSnap(snapId)
+      .then(() => updateMetamaskStateFromBackground())
+      .then((newState) => dispatch(updateMetamaskState(newState)));
+  };
+}
+
+export function enableSnap(snapId) {
+  return (dispatch) => {
+    return promisifiedBackground
+      .enableSnap(snapId)
+      .then(() => updateMetamaskStateFromBackground())
+      .then((newState) => dispatch(updateMetamaskState(newState)));
+  };
+}
+
+export function removeSnap(snapId) {
+  return (dispatch) => {
+    return promisifiedBackground
+      .removeSnap(snapId)
+      .then(() => updateMetamaskStateFromBackground())
+      .then((newState) => dispatch(updateMetamaskState(newState)));
+  };
+}
+
 export function removeSnapError(msgData) {
   return (dispatch) => {
     return promisifiedBackground

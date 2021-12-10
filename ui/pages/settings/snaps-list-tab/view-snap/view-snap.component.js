@@ -18,7 +18,7 @@ function ViewSnap({ snap, onRemove, onToggle }) {
   return (
     <div className="settings-page__content-row">
       <div className="settings-page__content-item">
-        <div className="settings-page__subheader view-snap__header">
+        <div className="view-snap__header">
           <Box display={DISPLAY.FLEX} alignItems={ALIGN_ITEMS.CENTER}></Box>
           <Typography variant={TYPOGRAPHY.H3}>{snap.name}</Typography>
           <SnapsAuthorshipPill

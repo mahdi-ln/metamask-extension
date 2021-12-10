@@ -1,15 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SnapSettingsCard from '../../../components/app/flask/snap-settings-card';
+import { removeSnap } from '../../../store/actions';
 import ViewSnap from './view-snap';
 
 const propTypes = {
-  snaps: PropTypes.array.isRequired,
+  snaps: PropTypes.object.isRequired,
   viewingSnap: PropTypes.bool,
   snap: PropTypes.object,
   onClick: PropTypes.func.isRequired,
   onRemove: PropTypes.func.isRequired,
   onToggle: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 const SnapListTab = (props) => {
@@ -20,6 +22,7 @@ const SnapListTab = (props) => {
         onToggle={(event) => props.onToggle(event, props.snap)}
         onRemove={(event) => {
           props.onRemove(event, props.snap);
+          props.dispatch(removeSnap(props.snap.name));
         }}
       />
     );

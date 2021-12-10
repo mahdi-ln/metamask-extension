@@ -992,6 +992,15 @@ export default class MetamaskController extends EventEmitter {
       removeSnapError: nodeify(
         this.snapController.removeSnapError.bind(this.snapController),
       ),
+      disableSnap: nodeify(
+        this.snapController.disableSnap.bind(this.snapController),
+      ),
+      enableSnap: nodeify(
+        this.snapController.enableSnap.bind(this.snapController),
+      ),
+      removeSnap: nodeify(
+        this.snapController.removeSnap.bind(this.snapController),
+      ),
       ///: END:ONLY_INCLUDE_IN
       setCurrentCurrency: nodeify(
         this.currencyRateController.setCurrentCurrency.bind(
