@@ -326,7 +326,7 @@ async function estimateGasLimitForSend({
       );
       return addHexPrefix(estimateWithBuffer);
     }
-    throw error;
+    // throw error;
   }
 }
 
@@ -1574,6 +1574,7 @@ export function signTransaction() {
       draftTransaction: { id, txParams },
       recipient: { address },
       amount: { value },
+      account: { address: selectedAddress },
       eip1559support,
     } = state[name];
     if (stage === SEND_STAGES.EDIT) {
@@ -1601,8 +1602,6 @@ export function signTransaction() {
       };
       dispatch(updateTransaction(editingTx));
     } else if (asset.type === ASSET_TYPES.TOKEN) {
-      //TODO FIGURE OUT THE CORRECT ABI HERE!
-
       // When sending a token transaction we have to the token.transfer method
       // on the token contract to construct the transaction. This results in
       // the proper transaction data and properties being set and a new
@@ -1622,18 +1621,30 @@ export function signTransaction() {
         dispatch(displayWarning(error.message));
       }
     } else if (asset.type === ASSET_TYPES.COLLECTIBLE) {
-      // When sending a token transaction we have to the token.transfer method
-      // on the token contract to construct the transaction. This results in
+      // When sending a collectible transaction we have to use the collectible.transferFrom method
+      // on the collectible contract to construct the transaction. This results in
       // the proper transaction data and properties being set and a new
       // transaction being added to background state. Once the new transaction
       // is added to state a subsequent confirmation will be queued.
       try {
-        const token = global.eth.contract(abiERC721).at(asset.details.address);
-        token.transferFrom(address, value, {
-          ...txParams,
-          to: undefined,
-          data: undefined,
-        });
+        const collectibleContract = global.eth
+          .contract(abiERC721)
+          .at(asset.details.address);
+        try {
+          collectibleContract.transferFrom(
+            selectedAddress,
+            address,
+            asset?.details?.tokenId,
+            {
+              ...txParams,
+              // gas: '200B20',
+              to: undefined,
+              data: undefined,
+            },
+          );
+        } catch (error) {
+          console.log('errror', error);
+        }
         dispatch(showConfTxPage());
         dispatch(hideLoadingIndication());
       } catch (error) {
