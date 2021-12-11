@@ -9,7 +9,7 @@ In this method in adition  to website/d-app address user has to approves the web
 
 When user wants to interact with a smart contract the wallet would check deployer of the smart contract be same as creator of approved token.
 
-Note: AI had informed metamask about these improvment in their reddit channel my post is still there (first I tried to do it in their forum proposal section but the account I created their wasn't able to post from begining') but I think they prefer exchanges(swaps) happen through their wallet not websites front-end
+Note: AI had informed metamask about these improvment in their reddit channel my post is still there (first I tried to do it in their forum proposal section but the account I created their wasn't able to post from begining') but I think they prefer exchanges(swaps) happen through their wallet not websites front-end as metamask receive a commission for it
 
 Donations:
 BEP20: 0xb85a49F5E23E719e39043a945D896f54D21e42c5
