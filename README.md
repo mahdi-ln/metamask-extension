@@ -8,6 +8,8 @@ In this method in adition  to website/d-app address user has to approves the web
 
 When user wants to interact with a smart contract the wallet would check deployer of the smart contract be same as creator of approved token.
 
+Donations:
+BEP20: 0xb85a49F5E23E719e39043a945D896f54D21e42c5
 
 
 Some other risks:
