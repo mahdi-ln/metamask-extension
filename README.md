@@ -16,6 +16,8 @@ BEP20: 0xb85a49F5E23E719e39043a945D896f54D21e42c5
 
 Start to work after 300$
 
+The code will be audited and my identity will be doxxed
+
 
 Some other risks:
 ---
